@@ -71,6 +71,9 @@ async fn main() -> std::io::Result<()> {
     .await
 }
 
+/*
+ * Test section
+ */
 #[cfg(test)]
 mod tests_endpoint_status {
     use super::*;

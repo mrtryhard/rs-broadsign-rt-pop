@@ -17,6 +17,9 @@ pub struct AppContext {
     pub database: Database,
 }
 
+/* Database implementation based on SQLite.
+ * Contains some methods to simplify usage in endpoints.
+ */
 impl Database {
     pub fn from_sqlite(file_name: &'static str) -> Self {
         let manager = SqliteConnectionManager::file(file_name);
@@ -55,7 +58,7 @@ impl Database {
 
         if let Err(e) = result {
             error!("Could not create tables: {}", e);
-            panic!("Could not create tables.");
+            panic!("Could not create tables: {}", e);
         }
 
         Database {
@@ -184,6 +187,9 @@ impl Database {
     }
 }
 
+/*
+ * Test section
+ */
 #[cfg(test)]
 mod tests_database {
     use super::*;

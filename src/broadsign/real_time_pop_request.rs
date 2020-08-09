@@ -38,8 +38,8 @@ pub struct RealTimePopEntry {
     pub extra_data: serde_json::Value,
 }
 
-/* Request sent by Broadsign Player, as defined on the website:
- * https://docs.broadsign.com/broadsign-control/13-0/real-time-pop-api.html
+/* Request sent by Broadsign Player, as defined on Broadsign's website:
+ * https://docs.broadsign.com/broadsign-control/13-2/real-time-pop-api.html
  */
 #[derive(Serialize, Deserialize, std::fmt::Debug)]
 pub struct RealTimePopRequest {
@@ -49,6 +49,9 @@ pub struct RealTimePopRequest {
     pub pops: Vec<RealTimePopEntry>,
 }
 
+/*
+ * Test section
+ */
 #[cfg(test)]
 mod protocol_serialization_tests {
     use super::*;
