@@ -27,6 +27,10 @@ You may set the log level by prepending `RUST_LOG=<level>`, where level correspo
 RUST_LOG=trace cargo run
 ```
 _Note that logs messages are not currently enabled in the tests by lack of time and will._
+
+## See proof of plays
+They are stored in the SQLite `pops.db` file in the working directory. For the tests, a `test.db` fle is used, instead.
+
 ## Using Insomnia
 An Insomnia file is available (`api_insomnia.json`). You may import it to help you debug or comprehend how to use this real-time pop server implementation.
 
