@@ -35,7 +35,7 @@ pub struct RealTimePopEntry {
     //    extra_data: Option<serde_json::Value>
     //
     // You may also want to strongly type it (create a struct and derive serde).
-    pub extra_data: serde_json::Value,
+    pub extra_data: Option<serde_json::Value>,
 }
 
 /* Request sent by Broadsign Player, as defined on Broadsign's website:
@@ -78,8 +78,8 @@ mod protocol_serialization_tests {
         assert_eq!(deserialized.pops[0].duration_ms, 5000);
         assert_eq!(deserialized.pops[0].service_name, "bmb");
         assert_eq!(deserialized.pops[0].service_value, "3451");
-        assert_eq!(deserialized.pops[0].extra_data.is_string(), true);
-        assert_eq!(deserialized.pops[0].extra_data, "");
+        assert_eq!(deserialized.pops[0].extra_data.is_some(), true);
+        assert_eq!(deserialized.pops[0].extra_data.as_ref().unwrap(), "");
 
         // Validate second pop
         assert_eq!(deserialized.pops[1].display_unit_id, 3456);
@@ -97,8 +97,8 @@ mod protocol_serialization_tests {
         assert_eq!(deserialized.pops[1].duration_ms, 5000);
         assert_eq!(deserialized.pops[1].service_name, "");
         assert_eq!(deserialized.pops[1].service_value, "");
-        assert_eq!(deserialized.pops[1].extra_data.is_string(), true);
-        assert_eq!(deserialized.pops[1].extra_data, "");
+        assert_eq!(deserialized.pops[1].extra_data.is_some(), true);
+        assert_eq!(deserialized.pops[1].extra_data.as_ref().unwrap(), "");
     }
 
     #[test]

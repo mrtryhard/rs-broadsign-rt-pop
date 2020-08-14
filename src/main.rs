@@ -111,7 +111,7 @@ mod tests_endpoint_pop {
                 duration_ms: 12996,
                 service_name: "bmb".to_owned(),
                 service_value: "701".to_owned(),
-                extra_data: json!(""),
+                extra_data: Option::Some(json!("")),
             }],
         }
     }

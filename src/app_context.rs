@@ -5,6 +5,7 @@ extern crate r2d2_sqlite;
 use crate::broadsign::real_time_pop_request::RealTimePopRequest;
 use r2d2_sqlite::SqliteConnectionManager;
 use rusqlite::{params, Result};
+use serde_json::json;
 use std::sync::Arc;
 
 pub struct Database {
@@ -160,7 +161,11 @@ impl Database {
                                 pop.duration_ms as i32,
                                 pop.service_name,
                                 pop.service_value,
-                                pop.extra_data.as_str().unwrap(),
+                                pop.extra_data
+                                    .as_ref()
+                                    .unwrap_or(&json!(""))
+                                    .as_str()
+                                    .unwrap(),
                                 pops.api_key
                             ],
                         );
@@ -244,7 +249,7 @@ mod tests_database {
                 duration_ms: 12996,
                 service_name: "bmb".to_owned(),
                 service_value: "701".to_owned(),
-                extra_data: json!(""),
+                extra_data: Option::Some(json!("")),
             }],
         });
 
