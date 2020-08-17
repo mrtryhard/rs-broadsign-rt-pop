@@ -3,7 +3,7 @@ extern crate log;
 mod app_context;
 mod broadsign;
 
-use actix_web::{middleware, web, App, HttpResponse, HttpServer};
+use actix_web::{middleware, web, App, FromRequest, HttpResponse, HttpServer};
 use app_context::{AppContext, Database};
 use broadsign::real_time_pop_request::RealTimePopRequest;
 
@@ -62,6 +62,9 @@ async fn main() -> std::io::Result<()> {
             .wrap(middleware::Logger::default())
             .service(
                 web::scope("")
+                    .app_data(web::Json::<RealTimePopRequest>::configure(|cfg| {
+                        cfg.limit(32000000)
+                    }))
                     .route("/status", web::get().to(status_get))
                     .route("/pop", web::post().to(pop_post)),
             )
