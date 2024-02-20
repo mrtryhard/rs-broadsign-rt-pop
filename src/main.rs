@@ -3,12 +3,12 @@ extern crate log;
 mod app_context;
 mod broadsign;
 
-use actix_web::{middleware, web, App, FromRequest, HttpResponse, HttpServer};
+use actix_web::{middleware, web, App, HttpResponse, HttpServer};
 use app_context::{AppContext, Database};
 use broadsign::real_time_pop_request::RealTimePopRequest;
 
 // We keep authentication at its simplest form, but you could
-// return the api user informations through a Result<UserIdentity> mechanism.
+// return the api user information through a Result<UserIdentity> mechanism.
 pub fn authenticate(app_context: &web::Data<AppContext>, api_key: &String) -> bool {
     app_context.database.user_exists(api_key)
 }
@@ -56,15 +56,13 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
-            .data(AppContext {
+            .app_data(web::PayloadConfig::new(32000000))
+            .app_data(AppContext {
                 database: Database::from_sqlite("pops.db"),
             })
             .wrap(middleware::Logger::default())
             .service(
                 web::scope("")
-                    .app_data(web::Json::<RealTimePopRequest>::configure(|cfg| {
-                        cfg.limit(32000000)
-                    }))
                     .route("/status", web::get().to(status_get))
                     .route("/pop", web::post().to(pop_post)),
             )
@@ -110,11 +108,11 @@ mod tests_endpoint_pop {
                 schedule_id: 61001,
                 impressions: 675,
                 interactions: 0,
-                end_time: chrono::NaiveDate::from_ymd(2017, 11, 23).and_hms_milli(13, 27, 12, 500),
+                end_time: chrono::NaiveDate::from_ymd_opt(2017, 11, 23).and_hms_milli(13, 27, 12, 500),
                 duration_ms: 12996,
                 service_name: "bmb".to_owned(),
                 service_value: "701".to_owned(),
-                extra_data: Option::Some(json!("")),
+                extra_data: Some(json!("")),
             }],
         }
     }

@@ -1,21 +1,21 @@
 [package]
 name = "broadsign-rt-pop-server"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Alexandre Leblanc <a.leblanc@mrtryhard.info>"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-actix-web = "2"
-actix-rt = "1"
+actix-web = "4.5.1"
+actix-rt = "2.9"
 chrono = { version = "0.4.13",  features = ["serde"] }
-env_logger = "0.7"
-log = "0.4"
-rusqlite = { version = "0.23", features = ["bundled"] }
-serde = "1.0"
-serde_derive = "1.0"
-serde_json = "1.0"
-serde_repr = "0.1"
-r2d2 = "0.8"
-r2d2_sqlite = "0.16"
+env_logger = "0.11"
+log = "0.4.11"
+rusqlite = { version = "0.31", features = ["bundled"] }
+serde = "1.0.197"
+serde_derive = "1.0.197"
+serde_json = "1.0.114"
+serde_repr = "0.1.18"
+r2d2 = "0.8.10"
+r2d2_sqlite = "0.24"

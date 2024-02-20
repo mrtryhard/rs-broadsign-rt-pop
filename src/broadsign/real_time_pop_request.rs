@@ -1,7 +1,7 @@
 extern crate serde_derive;
 
 use chrono::naive::NaiveDateTime;
-use serde::{Deserialize, Serialize};
+use serde_derive::{Deserialize, Serialize};
 
 /* A proof of play (pop) entry from the request. Some fields were aliased
  * to be more explicit.
