@@ -6,6 +6,9 @@ It comes with **no warranty**.
 This is an implementation of version Broadsign Control 13.2's real-time pop protocol:
 https://docs.broadsign.com/broadsign-control/13-2/real-time-pop-api.html
 
+### Using in your Broadsign configuration
+The endpoint should be pointing to `<url to server>/pop`.
+
 ## Installing Rust
 Follow the steps indicated on the official page:
 https://www.rust-lang.org/tools/install

@@ -4,6 +4,7 @@ mod app_context;
 mod broadsign;
 
 use actix_web::{middleware, web, App, HttpResponse, HttpServer};
+use actix_web::web::Data;
 use app_context::{AppContext, Database};
 use broadsign::real_time_pop_request::RealTimePopRequest;
 
@@ -57,9 +58,9 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(web::PayloadConfig::new(32000000))
-            .app_data(AppContext {
+            .app_data(Data::new(AppContext {
                 database: Database::from_sqlite("pops.db"),
-            })
+            }))
             .wrap(middleware::Logger::default())
             .service(
                 web::scope("")
@@ -108,7 +109,7 @@ mod tests_endpoint_pop {
                 schedule_id: 61001,
                 impressions: 675,
                 interactions: 0,
-                end_time: chrono::NaiveDate::from_ymd_opt(2017, 11, 23).and_hms_milli(13, 27, 12, 500),
+                end_time: chrono::NaiveDate::from_ymd_opt(2017, 11, 23).unwrap_or_default().and_hms_milli_opt(13, 27, 12, 500).unwrap_or_default(),
                 duration_ms: 12996,
                 service_name: "bmb".to_owned(),
                 service_value: "701".to_owned(),

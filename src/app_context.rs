@@ -165,7 +165,7 @@ impl Database {
                                     .as_ref()
                                     .unwrap_or(&json!(""))
                                     .as_str()
-                                    .unwrap(),
+                                    .unwrap_or(""),
                                 pops.api_key
                             ],
                         );
@@ -197,17 +197,16 @@ impl Database {
  */
 #[cfg(test)]
 mod tests_database {
+    use rusqlite::config::DbConfig::SQLITE_DBCONFIG_LEGACY_ALTER_TABLE;
     use super::*;
     use crate::broadsign::real_time_pop_request::{RealTimePopEntry, RealTimePopRequest};
-    use rusqlite::NO_PARAMS;
     use serde_json::json;
 
     fn ensure_user(db: &Database) {
         let conn = db.pool.get().unwrap();
+
         let r = conn.execute(
-            "insert or ignore into api_users (api_key) values ('some_secure_api_key')",
-            NO_PARAMS,
-        );
+            "insert or ignore into api_users (api_key) values ('some_secure_api_key')", ());
 
         if let Err(e) = r {
             panic!("{}", e);
