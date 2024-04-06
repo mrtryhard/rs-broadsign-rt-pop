@@ -21,7 +21,7 @@ pub struct RealTimePopEntry {
     // deduce a time zone, so we're using NaiveDateTime. If your players are guaranteed to
     // be on the same timezone as the server, you may use:
     //
-    //    chrono::DateTime<chrono::Local> (DateTime<Local>)
+    //    `chrono::DateTime<chrono::Local> (DateTime<Local>)`
     pub end_time: NaiveDateTime,
     #[serde(rename = "duration")]
     pub duration_ms: u32,
@@ -73,7 +73,10 @@ mod protocol_serialization_tests {
         assert_eq!(deserialized.pops[0].interactions, 0);
         assert_eq!(
             deserialized.pops[0].end_time,
-            NaiveDate::from_ymd(2016, 5, 31).and_hms_milli(10, 14, 50, 200)
+            NaiveDate::from_ymd_opt(2016, 5, 31)
+                .unwrap()
+                .and_hms_milli_opt(10, 14, 50, 200)
+                .unwrap()
         );
         assert_eq!(deserialized.pops[0].duration_ms, 5000);
         assert_eq!(deserialized.pops[0].service_name, "bmb");
@@ -92,7 +95,10 @@ mod protocol_serialization_tests {
         assert_eq!(deserialized.pops[1].interactions, 1);
         assert_eq!(
             deserialized.pops[1].end_time,
-            NaiveDate::from_ymd(2016, 5, 31).and_hms_milli(10, 14, 55, 200)
+            NaiveDate::from_ymd_opt(2016, 5, 31)
+                .unwrap()
+                .and_hms_milli_opt(10, 14, 55, 200)
+                .unwrap()
         );
         assert_eq!(deserialized.pops[1].duration_ms, 5000);
         assert_eq!(deserialized.pops[1].service_name, "");

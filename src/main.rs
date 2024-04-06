@@ -3,14 +3,14 @@ extern crate log;
 mod app_context;
 mod broadsign;
 
-use actix_web::{middleware, web, App, HttpResponse, HttpServer};
 use actix_web::web::Data;
+use actix_web::{middleware, web, App, HttpResponse, HttpServer};
 use app_context::{AppContext, Database};
 use broadsign::real_time_pop_request::RealTimePopRequest;
 
 // We keep authentication at its simplest form, but you could
 // return the api user information through a Result<UserIdentity> mechanism.
-pub fn authenticate(app_context: &web::Data<AppContext>, api_key: &String) -> bool {
+pub fn authenticate(app_context: &Data<AppContext>, api_key: &String) -> bool {
     app_context.database.user_exists(api_key)
 }
 
@@ -19,7 +19,7 @@ pub async fn status_get() -> HttpResponse {
 }
 
 pub async fn pop_post(
-    app_context: web::Data<AppContext>,
+    app_context: Data<AppContext>,
     pop_data: web::Json<RealTimePopRequest>,
 ) -> HttpResponse {
     let pop_data: RealTimePopRequest = pop_data.into_inner();
@@ -109,7 +109,10 @@ mod tests_endpoint_pop {
                 schedule_id: 61001,
                 impressions: 675,
                 interactions: 0,
-                end_time: chrono::NaiveDate::from_ymd_opt(2017, 11, 23).unwrap_or_default().and_hms_milli_opt(13, 27, 12, 500).unwrap_or_default(),
+                end_time: chrono::NaiveDate::from_ymd_opt(2017, 11, 23)
+                    .unwrap_or_default()
+                    .and_hms_milli_opt(13, 27, 12, 500)
+                    .unwrap_or_default(),
                 duration_ms: 12996,
                 service_name: "bmb".to_owned(),
                 service_value: "701".to_owned(),
@@ -118,8 +121,8 @@ mod tests_endpoint_pop {
         }
     }
 
-    fn make_app_context() -> web::Data<AppContext> {
-        web::Data::<AppContext>::new(AppContext {
+    fn make_app_context() -> Data<AppContext> {
+        Data::<AppContext>::new(AppContext {
             database: Database::from_sqlite("test.db"),
         })
     }

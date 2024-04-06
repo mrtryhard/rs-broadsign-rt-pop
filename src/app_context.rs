@@ -12,7 +12,7 @@ pub struct Database {
     pool: Arc<r2d2::Pool<SqliteConnectionManager>>,
 }
 
-// Quick and simple AppContext that will contain the database context
+// Quick and simple AppContext that will contain the database context,
 // so we can store the pops.
 pub struct AppContext {
     pub database: Database,
@@ -82,13 +82,10 @@ impl Database {
                     |row| row.get(0),
                 );
 
-                match result {
-                    Ok(exists) => exists,
-                    Err(e) => {
-                        error!("{}", e);
-                        false
-                    }
-                }
+                result.unwrap_or_else(|e| {
+                    error!("{}", e);
+                    false
+                })
             }
         }
     }
@@ -117,10 +114,10 @@ impl Database {
     pub fn store_pop(&self, pops: &RealTimePopRequest) -> bool {
         let pool_result = self.pool.get();
 
-        match pool_result {
+        return match pool_result {
             Err(e) => {
                 error!("Could not get database connection: {}", e);
-                return false;
+                false
             }
             Ok(mut conn) => {
                 if let Ok(tx) = conn.transaction() {
@@ -157,7 +154,7 @@ impl Database {
                                 pop.schedule_id as i64,
                                 pop.impressions as i32,
                                 pop.interactions as i32,
-                                pop.end_time.timestamp_millis(),
+                                pop.end_time.and_utc().timestamp_millis(),
                                 pop.duration_ms as i32,
                                 pop.service_name,
                                 pop.service_value,
@@ -177,18 +174,18 @@ impl Database {
                         }
                     }
 
-                    match tx.commit() {
-                        Ok(_) => return true,
+                    return match tx.commit() {
+                        Ok(_) => true,
                         Err(e) => {
                             error!("{}", e);
-                            return false;
+                            false
                         }
-                    }
+                    };
                 }
 
-                return false;
+                false
             }
-        }
+        };
     }
 }
 
@@ -197,16 +194,18 @@ impl Database {
  */
 #[cfg(test)]
 mod tests_database {
-    use rusqlite::config::DbConfig::SQLITE_DBCONFIG_LEGACY_ALTER_TABLE;
     use super::*;
     use crate::broadsign::real_time_pop_request::{RealTimePopEntry, RealTimePopRequest};
+    use rusqlite::config::DbConfig::SQLITE_DBCONFIG_LEGACY_ALTER_TABLE;
     use serde_json::json;
 
     fn ensure_user(db: &Database) {
         let conn = db.pool.get().unwrap();
 
         let r = conn.execute(
-            "insert or ignore into api_users (api_key) values ('some_secure_api_key')", ());
+            "insert or ignore into api_users (api_key) values ('some_secure_api_key')",
+            (),
+        );
 
         if let Err(e) = r {
             panic!("{}", e);
