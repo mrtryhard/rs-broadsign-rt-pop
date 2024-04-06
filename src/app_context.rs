@@ -242,7 +242,10 @@ mod tests_database {
                 schedule_id: 61001,
                 impressions: 675,
                 interactions: 0,
-                end_time: chrono::NaiveDate::from_ymd_opt(2017, 11, 23).unwrap().and_hms_milli_opt(13, 27, 12, 500).unwrap(),
+                end_time: chrono::NaiveDate::from_ymd_opt(2017, 11, 23)
+                    .unwrap()
+                    .and_hms_milli_opt(13, 27, 12, 500)
+                    .unwrap(),
                 duration_ms: 12996,
                 service_name: "bmb".to_owned(),
                 service_value: "701".to_owned(),
