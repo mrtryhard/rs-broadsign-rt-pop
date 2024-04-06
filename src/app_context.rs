@@ -196,7 +196,6 @@ impl Database {
 mod tests_database {
     use super::*;
     use crate::broadsign::real_time_pop_request::{RealTimePopEntry, RealTimePopRequest};
-    use rusqlite::config::DbConfig::SQLITE_DBCONFIG_LEGACY_ALTER_TABLE;
     use serde_json::json;
 
     fn ensure_user(db: &Database) {
@@ -243,7 +242,7 @@ mod tests_database {
                 schedule_id: 61001,
                 impressions: 675,
                 interactions: 0,
-                end_time: chrono::NaiveDate::from_ymd(2017, 11, 23).and_hms_milli(13, 27, 12, 500),
+                end_time: chrono::NaiveDate::from_ymd_opt(2017, 11, 23).unwrap().and_hms_milli_opt(13, 27, 12, 500).unwrap(),
                 duration_ms: 12996,
                 service_name: "bmb".to_owned(),
                 service_value: "701".to_owned(),
