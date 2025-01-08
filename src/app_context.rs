@@ -114,7 +114,7 @@ impl Database {
     pub fn store_pop(&self, pops: &RealTimePopRequest) -> bool {
         let pool_result = self.pool.get();
 
-        return match pool_result {
+        match pool_result {
             Err(e) => {
                 error!("Could not get database connection: {}", e);
                 false
@@ -185,7 +185,7 @@ impl Database {
 
                 false
             }
-        };
+        }
     }
 }
 
