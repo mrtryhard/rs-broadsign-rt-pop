@@ -15,6 +15,6 @@ log = "0.4.25"
 rusqlite = { version = "0.32.1", features = ["bundled"] }
 serde = "1.0.217"
 serde_derive = "1.0.217"
-serde_json = "1.0.138"
+serde_json = "1.0.139"
 r2d2 = "0.8.10"
 r2d2_sqlite = "0.25"
